@@ -1,3 +1,10 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:taskmanagementsystem/Application/services/task_service_impl.dart';
+import 'package:taskmanagementsystem/Data/repository/memory_task_repository.dart';
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+import 'package:taskmanagementsystem/Domain/repository/task_repository.dart';
+import 'package:taskmanagementsystem/Domain/usecases/task_usecases.dart';
+
 void main() {
   late TaskRepository repository;
   late TaskService taskService;
@@ -33,10 +40,10 @@ void main() {
   group('TaskServiceImpl', () {
     test('should create and retrieve a task', () async {
       // Arrange
-      final title = 'Service Test Task';
-      final description = 'Testing task service';
-      final dueDate = DateTime.now().add(Duration(days: 1));
-      final priority = Priority.high;
+      const title = 'Service Test Task';
+      const description = 'Testing task service';
+      final dueDate = DateTime.now().add(const Duration(days: 1));
+      const priority = Priority.high;
       final tags = ['test', 'service'];
       
       // Act
@@ -63,7 +70,7 @@ void main() {
       await taskService.createTask(
         'Task to toggle',
         'Description',
-        DateTime.now().add(Duration(days: 1)),
+        DateTime.now().add(const Duration(days: 1)),
         Priority.medium,
         ['toggle'],
       );
@@ -91,7 +98,7 @@ void main() {
       await taskService.createTask(
         'Low Priority Task',
         'Description',
-        DateTime.now().add(Duration(days: 1)),
+        DateTime.now().add(const Duration(days: 1)),
         Priority.low,
         ['low'],
       );
@@ -99,7 +106,7 @@ void main() {
       await taskService.createTask(
         'High Priority Task',
         'Description',
-        DateTime.now().add(Duration(days: 1)),
+        DateTime.now().add(const Duration(days: 1)),
         Priority.high,
         ['high'],
       );
@@ -107,7 +114,7 @@ void main() {
       await taskService.createTask(
         'Another High Priority Task',
         'Description',
-        DateTime.now().add(Duration(days: 2)),
+        DateTime.now().add(const Duration(days: 2)),
         Priority.high,
         ['high'],
       );
@@ -124,9 +131,9 @@ void main() {
     test('should get tasks by due date range', () async {
       // Arrange
       final now = DateTime.now();
-      final tomorrow = now.add(Duration(days: 1));
-      final nextWeek = now.add(Duration(days: 7));
-      final nextMonth = now.add(Duration(days: 30));
+      final tomorrow = now.add(const Duration(days: 1));
+      final nextWeek = now.add(const Duration(days: 7));
+      final nextMonth = now.add(const Duration(days: 30));
       
       await taskService.createTask(
         'Tomorrow Task',
@@ -155,7 +162,7 @@ void main() {
       // Act
       final soonTasks = await taskService.getTasksByDueDate(
         startDate: now,
-        endDate: now.add(Duration(days: 10)),
+        endDate: now.add(const Duration(days: 10)),
       );
       
       // Assert
@@ -169,7 +176,7 @@ void main() {
       await taskService.createTask(
         'Work Task',
         'Description',
-        DateTime.now().add(Duration(days: 1)),
+        DateTime.now().add(const Duration(days: 1)),
         Priority.high,
         ['work', 'important'],
       );
@@ -177,7 +184,7 @@ void main() {
       await taskService.createTask(
         'Personal Task',
         'Description',
-        DateTime.now().add(Duration(days: 2)),
+        DateTime.now().add(const Duration(days: 2)),
         Priority.medium,
         ['personal', 'important'],
       );
@@ -185,7 +192,7 @@ void main() {
       await taskService.createTask(
         'Shopping Task',
         'Description',
-        DateTime.now().add(Duration(days: 3)),
+        DateTime.now().add(const Duration(days: 3)),
         Priority.low,
         ['personal', 'shopping'],
       );

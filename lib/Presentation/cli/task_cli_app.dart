@@ -1,7 +1,23 @@
+import 'dart:io';
+import 'package:logging/logging.dart';
+
+import 'package:taskmanagementsystem/Core/costants/app_constants.dart';
+import 'package:taskmanagementsystem/Core/error/exceptions.dart';
+import 'package:taskmanagementsystem/Core/utils/date_utils.dart';
+import 'package:taskmanagementsystem/Presentation/controllers/task_controllers.dart';
+import 'package:taskmanagementsystem/Presentation/view_models/task_view_model.dart';
+
 class TaskCliApp {
   final TaskController _taskController;
+  final Logger _logger = Logger('TaskCliApp');
   
-  TaskCliApp(this._taskController);
+  TaskCliApp(this._taskController) {
+    // Initialize logging
+    Logger.root.level = Level.INFO;
+    Logger.root.onRecord.listen((record) {
+      stdout.writeln('${record.level.name}: ${record.message}');
+    });
+  }
   
   void run() async {
     _printWelcomeMessage();
@@ -15,23 +31,22 @@ class TaskCliApp {
       try {
         running = await _processCommand(input);
       } catch (e) {
-        print('\nError: ${e.toString()}\n');
+        _logger.severe('Error: ${e.toString()}');
       }
     }
     
-    print('\nThank you for using ${AppConstants.appName}!\n');
+    _logger.info('\nThank you for using ${AppConstants.appName}!\n');
   }
   
   void _printWelcomeMessage() {
-    print('\n========================================');
-    print('  ${AppConstants.appName} v${AppConstants.appVersion}');
-    print('========================================\n');
-    print('Type "help" to see available commands.\n');
+    _logger.info('\n========================================');
+    _logger.info('  ${AppConstants.appName} v${AppConstants.appVersion}');
+    _logger.info('========================================\n');
+    _logger.info('Type "help" to see available commands.\n');
   }
   
   void _displayMenu() {
-    print('What would you like to do?');
-    print('> ');
+    stdout.write('What would you like to do?\n> ');
   }
   
   Future<bool> _processCommand(String input) async {
@@ -47,28 +62,28 @@ class TaskCliApp {
         break;
       case 'update':
         if (parts.length < 2) {
-          print('Usage: update <task-id>');
+          _logger.warning('Usage: update <task-id>');
         } else {
           await _updateTask(parts[1]);
         }
         break;
       case 'delete':
         if (parts.length < 2) {
-          print('Usage: delete <task-id>');
+          _logger.warning('Usage: delete <task-id>');
         } else {
           await _deleteTask(parts[1]);
         }
         break;
       case 'complete':
         if (parts.length < 2) {
-          print('Usage: complete <task-id>');
+          _logger.warning('Usage: complete <task-id>');
         } else {
           await _toggleTaskCompletion(parts[1]);
         }
         break;
       case 'search':
         if (parts.length < 2) {
-          print('Usage: search <query>');
+          _logger.warning('Usage: search <query>');
         } else {
           await _searchTasks(parts.sublist(1).join(' '));
         }
@@ -89,7 +104,7 @@ class TaskCliApp {
       case 'quit':
         return false;
       default:
-        print('Unknown command. Type "help" to see available commands.');
+        _logger.warning('Unknown command. Type "help" to see available commands.');
     }
     
     return true;
@@ -115,20 +130,20 @@ class TaskCliApp {
         break;
       case 'priority':
         if (args.length < 2) {
-          print('Usage: list priority <low|medium|high|urgent>');
+          _logger.warning('Usage: list priority <low|medium|high|urgent>');
           return;
         }
         tasks = await _taskController.getTasksByPriority(args[1]);
         break;
       case 'tag':
         if (args.length < 2) {
-          print('Usage: list tag <tag-name>');
+          _logger.warning('Usage: list tag <tag-name>');
           return;
         }
         tasks = await _taskController.getTasksByTag(args[1]);
         break;
       default:
-        print('Unknown filter: $filter. Available filters: all, active, completed, priority, tag');
+        _logger.warning('Unknown filter: $filter. Available filters: all, active, completed, priority, tag');
         return;
     }
     
@@ -137,51 +152,51 @@ class TaskCliApp {
   
   void _displayTasks(List<TaskViewModel> tasks) {
     if (tasks.isEmpty) {
-      print('\nNo tasks found.\n');
+      _logger.info('\nNo tasks found.\n');
       return;
     }
     
-    print('\nFound ${tasks.length} tasks:\n');
-    print('ID | Title | Due Date | Priority | Status | Tags');
-    print('---------------------------------------------------------');
+    _logger.info('\nFound ${tasks.length} tasks:\n');
+    _logger.info('ID | Title | Due Date | Priority | Status | Tags');
+    _logger.info('---------------------------------------------------------');
     
     for (var task in tasks) {
       final status = task.isCompleted ? '✓' : ' ';
-      print('${task.id} | ${task.title} | ${task.formattedDueDate} | ${task.prioritySymbol} ${task.priorityName} | [$status] | ${task.formattedTags}');
+      _logger.info('${task.id} | ${task.title} | ${task.formattedDueDate} | ${task.prioritySymbol} ${task.priorityName} | [$status] | ${task.formattedTags}');
     }
     
-    print('\n');
+    _logger.info('\n');
   }
   
   Future<void> _addTask() async {
-    print('\nEnter task details:');
+    _logger.info('\nEnter task details:');
     
-    print('Title: ');
+    stdout.write('Title: ');
     final title = stdin.readLineSync()?.trim() ?? '';
     if (title.isEmpty) {
-      print('Title cannot be empty. Task creation cancelled.');
+      _logger.warning('Title cannot be empty. Task creation cancelled.');
       return;
     }
     
-    print('Description: ');
+    stdout.write('Description: ');
     final description = stdin.readLineSync()?.trim() ?? '';
     
     DateTime? dueDate;
     while (dueDate == null) {
-      print('Due Date (YYYY-MM-DD): ');
+      stdout.write('Due Date (YYYY-MM-DD): ');
       final dueDateStr = stdin.readLineSync()?.trim() ?? '';
       
       try {
         dueDate = DateUtils.parseDate(dueDateStr);
       } catch (e) {
-        print('Invalid date format. Please use YYYY-MM-DD.');
+        _logger.warning('Invalid date format. Please use YYYY-MM-DD.');
       }
     }
     
-    print('Priority (low, medium, high, urgent) [medium]: ');
+    stdout.write('Priority (low, medium, high, urgent) [medium]: ');
     final priorityStr = stdin.readLineSync()?.trim() ?? 'medium';
     
-    print('Tags (comma-separated): ');
+    stdout.write('Tags (comma-separated): ');
     final tags = stdin.readLineSync()?.trim() ?? '';
     
     await _taskController.createTask(
@@ -192,7 +207,7 @@ class TaskCliApp {
       tags,
     );
     
-    print('\nTask created successfully!\n');
+    _logger.info('\nTask created successfully!\n');
   }
   
   Future<void> _updateTask(String id) async {
@@ -202,34 +217,34 @@ class TaskCliApp {
       orElse: () => throw TaskException('Task with ID $id not found'),
     );
     
-    print('\nUpdating task: ${task.title}');
-    print('Leave fields empty to keep current values.\n');
+    _logger.info('\nUpdating task: ${task.title}');
+    _logger.info('Leave fields empty to keep current values.\n');
     
-    print('Title [${task.title}]: ');
+    stdout.write('Title [${task.title}]: ');
     final titleInput = stdin.readLineSync()?.trim() ?? '';
     final title = titleInput.isEmpty ? task.title : titleInput;
     
-    print('Description [${task.description}]: ');
+    stdout.write('Description [${task.description}]: ');
     final descriptionInput = stdin.readLineSync()?.trim() ?? '';
     final description = descriptionInput.isEmpty ? task.description : descriptionInput;
     
     DateTime dueDate = task.dueDate;
-    print('Due Date (YYYY-MM-DD) [${task.formattedDueDate}]: ');
+    stdout.write('Due Date (YYYY-MM-DD) [${task.formattedDueDate}]: ');
     final dueDateStr = stdin.readLineSync()?.trim() ?? '';
     
     if (dueDateStr.isNotEmpty) {
       try {
         dueDate = DateUtils.parseDate(dueDateStr);
       } catch (e) {
-        print('Invalid date format. Using current due date.');
+        _logger.warning('Invalid date format. Using current due date.');
       }
     }
     
-    print('Priority (low, medium, high, urgent) [${task.priorityName}]: ');
+    stdout.write('Priority (low, medium, high, urgent) [${task.priorityName}]: ');
     final priorityInput = stdin.readLineSync()?.trim() ?? '';
     final priority = priorityInput.isEmpty ? task.priorityName : priorityInput;
     
-    print('Tags (comma-separated) [${task.formattedTags}]: ');
+    stdout.write('Tags (comma-separated) [${task.formattedTags}]: ');
     final tagsInput = stdin.readLineSync()?.trim() ?? '';
     final tags = tagsInput.isEmpty ? task.formattedTags : tagsInput;
     
@@ -242,66 +257,66 @@ class TaskCliApp {
       tags,
     );
     
-    print('\nTask updated successfully!\n');
+    _logger.info('\nTask updated successfully!\n');
   }
   
   Future<void> _deleteTask(String id) async {
-    print('\nAre you sure you want to delete task with ID $id? (y/n): ');
+    stdout.write('\nAre you sure you want to delete task with ID $id? (y/n): ');
     final confirm = stdin.readLineSync()?.trim().toLowerCase() ?? '';
     
     if (confirm == 'y' || confirm == 'yes') {
       await _taskController.deleteTask(id);
-      print('\nTask deleted successfully!\n');
+      _logger.info('\nTask deleted successfully!\n');
     } else {
-      print('\nTask deletion cancelled.\n');
+      _logger.info('\nTask deletion cancelled.\n');
     }
   }
   
   Future<void> _toggleTaskCompletion(String id) async {
     await _taskController.toggleTaskCompletion(id);
-    print('\nTask completion status toggled!\n');
+    _logger.info('\nTask completion status toggled!\n');
   }
   
   Future<void> _searchTasks(String query) async {
     final tasks = await _taskController.searchTasks(query);
     
-    print('\nSearch results for "$query":\n');
+    _logger.info('\nSearch results for "$query":\n');
     _displayTasks(tasks);
   }
   
   Future<void> _showScheduledTasks() async {
     final tasks = await _taskController.getScheduledTasks();
     
-    print('\nTasks scheduled by priority and due date:\n');
+    _logger.info('\nTasks scheduled by priority and due date:\n');
     _displayTasks(tasks);
   }
   
   Future<void> _showTasksDueSoon() async {
     final tasks = await _taskController.getTasksDueSoon();
     
-    print('\nTasks due in the next ${AppConstants.defaultDueSoonDays} days:\n');
+    _logger.info('\nTasks due in the next ${AppConstants.defaultDueSoonDays} days:\n');
     _displayTasks(tasks);
   }
   
   Future<void> _showOverdueTasks() async {
     final tasks = await _taskController.getOverdueTasks();
     
-    print('\nOverdue tasks:\n');
+    _logger.info('\nOverdue tasks:\n');
     _displayTasks(tasks);
   }
   
   void _showHelp() {
-    print('\nAvailable commands:');
-    print('  list [all|active|completed|priority <level>|tag <tag>]');
-    print('  add                   - Add a new task');
-    print('  update <task-id>      - Update an existing task');
-    print('  delete <task-id>      - Delete a task');
-    print('  complete <task-id>    - Toggle task completion status');
-    print('  search <query>        - Search for tasks');
-    print('  schedule              - Show tasks scheduled by priority and due date');
-    print('  due-soon              - Show tasks due in the next few days');
-    print('  overdue               - Show overdue tasks');
-    print('  help                  - Show this help message');
-    print('  exit/quit             - Exit the application\n');
+    _logger.info('\nAvailable commands:');
+    _logger.info('  list [all|active|completed|priority <level>|tag <tag>]');
+    _logger.info('  add                   - Add a new task');
+    _logger.info('  update <task-id>      - Update an existing task');
+    _logger.info('  delete <task-id>      - Delete a task');
+    _logger.info('  complete <task-id>    - Toggle task completion status');
+    _logger.info('  search <query>        - Search for tasks');
+    _logger.info('  schedule              - Show tasks scheduled by priority and due date');
+    _logger.info('  due-soon              - Show tasks due in the next few days');
+    _logger.info('  overdue               - Show overdue tasks');
+    _logger.info('  help                  - Show this help message');
+    _logger.info('  exit/quit             - Exit the application\n');
   }
 }

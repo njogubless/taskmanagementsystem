@@ -1,3 +1,6 @@
+import 'package:taskmanagementsystem/Application/services/task_service_impl.dart';
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+
 class HeapPriorityQueue<T> {
   final List<T> _heap = [];
   final int Function(T, T) _compare;
@@ -5,6 +8,7 @@ class HeapPriorityQueue<T> {
   HeapPriorityQueue(this._compare);
   
   bool get isEmpty => _heap.isEmpty;
+  bool get isNotEmpty => _heap.isNotEmpty;
   int get length => _heap.length;
   
   void add(T element) {

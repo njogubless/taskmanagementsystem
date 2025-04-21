@@ -1,4 +1,6 @@
 
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+
 enum TaskViewMode {all, active, completed, priority, dueDate}
 
 class TaskViewModel {

@@ -1,3 +1,5 @@
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+
 class TaskModel {
   final String id;
   final String title;

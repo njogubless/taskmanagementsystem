@@ -1,5 +1,7 @@
 
 
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+
 abstract class TaskRepository {
   Future<List<Task>> getAllTasks();
   Future<Task?> getTaskById(String id);

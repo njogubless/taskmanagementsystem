@@ -1,3 +1,10 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:taskmanagementsystem/Core/error/exceptions.dart';
+import 'package:taskmanagementsystem/Data/repository/memory_task_repository.dart';
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+import 'package:taskmanagementsystem/Domain/repository/task_repository.dart';
+import 'package:taskmanagementsystem/Domain/usecases/task_usecases.dart';
+
 void main() {
   late TaskRepository repository;
   late CreateTaskUseCase createTaskUseCase;
@@ -22,10 +29,10 @@ void main() {
   group('CreateTaskUseCase', () {
     test('should create a task successfully', () async {
       // Arrange
-      final title = 'Test Task';
-      final description = 'Test Description';
-      final dueDate = DateTime.now().add(Duration(days: 1));
-      final priority = Priority.high;
+      const title = 'Test Task';
+      const description = 'Test Description';
+      final dueDate = DateTime.now().add(const Duration(days: 1));
+      const priority = Priority.high;
       final tags = ['test', 'task'];
       
       // Act
@@ -50,10 +57,10 @@ void main() {
     
     test('should throw TaskException when title is empty', () async {
       // Arrange
-      final title = '';
-      final description = 'Test Description';
-      final dueDate = DateTime.now().add(Duration(days: 1));
-      final priority = Priority.high;
+      const title = '';
+      const description = 'Test Description';
+      final dueDate = DateTime.now().add(const Duration(days: 1));
+      const priority = Priority.high;
       final tags = ['test', 'task'];
       
       // Act & Assert
@@ -84,7 +91,7 @@ void main() {
       await createTaskUseCase(
         title: 'Task 1',
         description: 'Description 1',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.low,
         tags: ['tag1'],
       );
@@ -92,7 +99,7 @@ void main() {
       await createTaskUseCase(
         title: 'Task 2',
         description: 'Description 2',
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(const Duration(days: 2)),
         priority: Priority.high,
         tags: ['tag2'],
       );
@@ -113,7 +120,7 @@ void main() {
       await createTaskUseCase(
         title: 'Task 1',
         description: 'Description 1',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.low,
         tags: ['tag1'],
       );
@@ -138,7 +145,7 @@ void main() {
     
     test('should throw TaskException when task does not exist', () async {
       // Arrange
-      final nonExistentId = 'non-existent-id';
+      const nonExistentId = 'non-existent-id';
       // Act & Assert
       expect(
         () => toggleTaskCompletionUseCase(nonExistentId),
@@ -153,7 +160,7 @@ void main() {
       await createTaskUseCase(
         title: 'Study Flutter',
         description: 'Learn about widgets',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['study', 'flutter'],
       );
@@ -161,7 +168,7 @@ void main() {
       await createTaskUseCase(
         title: 'Shopping',
         description: 'Buy groceries',
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(const Duration(days: 2)),
         priority: Priority.low,
         tags: ['shopping'],
       );
@@ -179,7 +186,7 @@ void main() {
       await createTaskUseCase(
         title: 'Study Flutter',
         description: 'Learn about widgets',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['study', 'flutter'],
       );
@@ -187,7 +194,7 @@ void main() {
       await createTaskUseCase(
         title: 'Shopping',
         description: 'Buy groceries',
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(const Duration(days: 2)),
         priority: Priority.low,
         tags: ['shopping'],
       );
@@ -205,7 +212,7 @@ void main() {
       await createTaskUseCase(
         title: 'Study Flutter',
         description: 'Learn about widgets',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['study', 'flutter'],
       );
@@ -213,7 +220,7 @@ void main() {
       await createTaskUseCase(
         title: 'Shopping',
         description: 'Buy groceries',
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(const Duration(days: 2)),
         priority: Priority.low,
         tags: ['shopping'],
       );

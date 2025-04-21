@@ -1,3 +1,8 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:taskmanagementsystem/Core/error/exceptions.dart';
+import 'package:taskmanagementsystem/Data/repository/memory_task_repository.dart';
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+
 void main() {
   late InMemoryTaskRepository repository;
   
@@ -20,7 +25,7 @@ void main() {
         id: '1',
         title: 'Test Task',
         description: 'Test Description',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['test'],
       );
@@ -41,7 +46,7 @@ void main() {
         id: '1',
         title: 'Test Task',
         description: 'Test Description',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['test'],
       );
@@ -68,7 +73,7 @@ void main() {
         id: '1',
         title: 'Test Task',
         description: 'Test Description',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['test'],
       );
@@ -89,7 +94,7 @@ void main() {
         id: '1',
         title: 'Test Task',
         description: 'Test Description',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['test'],
       );
@@ -109,7 +114,7 @@ void main() {
         id: '1',
         title: 'Test Task',
         description: 'Test Description',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['test'],
       );
@@ -135,7 +140,7 @@ void main() {
         id: '1',
         title: 'Flutter Development',
         description: 'Learn Flutter',
-        dueDate: DateTime.now().add(Duration(days: 1)),
+        dueDate: DateTime.now().add(const Duration(days: 1)),
         priority: Priority.medium,
         tags: ['flutter', 'mobile'],
       );
@@ -144,7 +149,7 @@ void main() {
         id: '2',
         title: 'Web Development',
         description: 'Learn React',
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(const Duration(days: 2)),
         priority: Priority.high,
         tags: ['web', 'react'],
       );

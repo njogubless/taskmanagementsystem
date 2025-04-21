@@ -1,3 +1,9 @@
+import 'dart:math';
+
+import 'package:taskmanagementsystem/Core/error/exceptions.dart';
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+import 'package:taskmanagementsystem/Domain/repository/task_repository.dart';
+
 class GetAllTasksUseCase {
   final TaskRepository repository;
   
@@ -116,12 +122,12 @@ class GetTasksByDueDateUseCase {
   
   Future<List<Task>> call({required DateTime startDate, DateTime? endDate}) async {
     final tasks = await repository.getAllTasks();
-    final end = endDate ?? DateTime.now().add(Duration(days: 365));
+    final end = endDate ?? DateTime.now().add(const Duration(days: 365));
     
     return tasks.where((task) {
       final date = task.dueDate;
-      return date.isAfter(startDate.subtract(Duration(days: 1))) && 
-             date.isBefore(end.add(Duration(days: 1)));
+      return date.isAfter(startDate.subtract(const Duration(days: 1))) && 
+             date.isBefore(end.add(const Duration(days: 1)));
     }).toList();
   }
 }

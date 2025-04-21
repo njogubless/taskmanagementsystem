@@ -4,7 +4,7 @@ enum Priority { low, medium, high, urgent }
 extension PriorityParsing on String {
   Priority toPriority() {
     return Priority.values.firstWhere(
-      (e) => e.toString().split('.').last.toLowerCase() == this.toLowerCase(),
+      (e) => e.toString().split('.').last.toLowerCase() == toLowerCase(),
       orElse: () => Priority.medium,
     );
   }
@@ -38,7 +38,7 @@ class Task {
     List<String>? tags,
   }) {
     return Task(
-      id: this.id,
+      id: id,
       title: title ?? this.title,
       description: description ?? this.description,
       dueDate: dueDate ?? this.dueDate,

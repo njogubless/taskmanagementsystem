@@ -1,3 +1,13 @@
+import 'package:taskmanagementsystem/Application/scheduler/task_scheduler.dart';
+import 'package:taskmanagementsystem/Application/services/task_service_impl.dart';
+import 'package:taskmanagementsystem/Core/costants/app_constants.dart';
+import 'package:taskmanagementsystem/Data/datasources/file_datasource.dart';
+import 'package:taskmanagementsystem/Data/repository/file_task_repository.dart';
+import 'package:taskmanagementsystem/Data/repository/memory_task_repository.dart';
+import 'package:taskmanagementsystem/Domain/repository/task_repository.dart';
+import 'package:taskmanagementsystem/Domain/usecases/task_usecases.dart';
+import 'package:taskmanagementsystem/Presentation/controllers/task_controllers.dart';
+
 class ServiceLocator {
   // Singleton instance
   static final ServiceLocator _instance = ServiceLocator._internal();

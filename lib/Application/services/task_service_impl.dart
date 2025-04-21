@@ -1,3 +1,6 @@
+import 'package:taskmanagementsystem/Domain/entities/task.dart';
+import 'package:taskmanagementsystem/Domain/usecases/task_usecases.dart';
+
 abstract class TaskService {
   Future<List<Task>> getAllTasks();
   Future<Task?> getTaskById(String id);
