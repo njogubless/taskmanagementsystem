@@ -112,4 +112,12 @@ class TaskController {
     final tasks = await _taskScheduler.getOverdueTasks();
     return tasks.map((task) => TaskViewModel.fromDomain(task)).toList();
   }
+
+  Future<Task> getTaskById(String id) async {
+    final task = await _taskService.getTaskById(id);
+    if (task == null) {
+      throw TaskException('Task with ID $id not found');
+    }
+    return task;
+  }
 }
